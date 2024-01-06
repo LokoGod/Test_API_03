@@ -15,5 +15,11 @@ namespace Test_API_03.Controllers
         {
             return TestStore.testList;
         }
+
+        [HttpGet("{id:int}")]
+        public TestDTO GetTestModel(int id) 
+        {
+            return TestStore.testList.FirstOrDefault(u => u.Id == id);
+        }
     }
 }
