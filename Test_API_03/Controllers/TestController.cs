@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Test_API_03.Data;
 using Test_API_03.Models;
 using Test_API_03.Models.DTO;
 
@@ -12,11 +13,13 @@ namespace Test_API_03.Controllers
         [HttpGet]
         public IEnumerable<TestDTO> GetTestModels()
         {
-            return new List<TestDTO>
-            {
-                new TestDTO{Id = 1, Name = "Kratos"},
-                new TestDTO{Id = 2, Name = "Batman"}
-            };
+            return TestStore.testList;
+        }
+
+        [HttpGet("{id:int}")]
+        public TestDTO GetTestModel(int id) 
+        {
+            return TestStore.testList.FirstOrDefault(u => u.Id == id);
         }
     }
 }
