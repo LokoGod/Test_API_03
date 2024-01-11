@@ -11,15 +11,33 @@ namespace Test_API_03.Controllers
     public class TestController : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<TestDTO> GetTestModels()
+        public ActionResult<IEnumerable<TestDTO>> GetTestModels()
         {
-            return TestStore.testList;
+            return Ok(TestStore.testList);
         }
 
         [HttpGet("{id:int}")]
-        public TestDTO GetTestModel(int id) 
+        public ActionResult<TestDTO> GetTestModel(int id) 
         {
-            return TestStore.testList.FirstOrDefault(u => u.Id == id);
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            var test = TestStore.testList.FirstOrDefault(element => element.Id == id);
+            if (test == null)
+            {
+                return NotFound();
+            }
+            return Ok(test);
         }
     }
 }
+
+// : - inherits
+// ActionResult - allows to send status codes
+// IEnumerable - Iterate through the data set (i think)
+// Ok - sends 200 status code
+// BadRequest - 400
+// NotFound - 404
+//FirstOrDefault (LINQ query), ((element => element.Id == id), a lambda expression where element is a parameter and tells the LINQ query
+                                                                                        //to return the resuslts based on the expression)
