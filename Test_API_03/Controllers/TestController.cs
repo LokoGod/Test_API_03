@@ -11,15 +11,26 @@ namespace Test_API_03.Controllers
     public class TestController : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<TestDTO> GetTestModels()
+        public ActionResult<IEnumerable<TestDTO>> GetTestModels()
         {
-            return TestStore.testList;
+            return Ok(TestStore.testList);
         }
 
         [HttpGet("{id:int}")]
-        public TestDTO GetTestModel(int id) 
+        public ActionResult<TestDTO> GetTestModel(int id) 
         {
-            return TestStore.testList.FirstOrDefault(u => u.Id == id);
+            if ( id == 0 )
+            {
+                return BadRequest();
+            }
+
+            var test = TestStore.testList.FirstOrDefault(u => u.Id == id);
+
+            if (test == null )
+            {
+                return NotFound();
+            }
+            return Ok(test);
         }
     }
 }
