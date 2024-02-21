@@ -47,6 +47,8 @@ namespace Test_API_03.Controllers
                 return BadRequest();
             }
 
+            // u.Id == id is the condition used to filter elements,
+            // It checks if the Id property of each element (u) is equal to the provided id variable.
             var test = TestStore.testList.FirstOrDefault(u => u.Id == id);
 
             if (test == null )
