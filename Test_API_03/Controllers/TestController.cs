@@ -11,13 +11,36 @@ namespace Test_API_03.Controllers
     public class TestController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<IEnumerable<TestDTO>> GetTestModels()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<TestDTO>> GetTests()
         {
             return Ok(TestStore.testList);
         }
 
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<TestDTO> CreateTest([FromBody]TestDTO testDTO)
+        {
+            if(testDTO == null)
+            {
+                return BadRequest(testDTO);
+            }
+            if (testDTO.Id > 0) {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            testDTO.Id = TestStore.testList.OrderByDescending(u => u.Id).FirstOrDefault().Id + 1;
+            TestStore.testList.Add(testDTO);
+
+            return Ok(testDTO);
+        }
+
         [HttpGet("{id:int}")]
-        public ActionResult<TestDTO> GetTestModel(int id) 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<TestDTO> GetSpecificTest(int id) 
         {
             if ( id == 0 )
             {
