@@ -18,11 +18,15 @@ namespace Test_API_03.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<TestDTO> CreateTest([FromBody]TestDTO testDTO)
         {
+            if(!ModelState.IsValid) 
+            {
+                return BadRequest(ModelState);
+            }
             if(testDTO == null)
             {
                 return BadRequest(testDTO);
@@ -33,10 +37,10 @@ namespace Test_API_03.Controllers
             testDTO.Id = TestStore.testList.OrderByDescending(u => u.Id).FirstOrDefault().Id + 1;
             TestStore.testList.Add(testDTO);
 
-            return Ok(testDTO);
+            return CreatedAtRoute("GetSpecificTest", new { id = testDTO.Id }, testDTO);
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}", Name = "GetSpecificTest" /*Giving explicit name for the method*/)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -56,6 +60,12 @@ namespace Test_API_03.Controllers
                 return NotFound();
             }
             return Ok(test);
+        }
+
+        [HttpDelete("${id}")]
+        public ActionResult<TestDTO> DeleteSpecificTest(int id)
+        {
+
         }
     }
 }
