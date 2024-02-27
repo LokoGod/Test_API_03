@@ -21,17 +21,24 @@ namespace Test_API_03.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<TestDTO> CreateTest([FromBody]TestDTO testDTO)
+        public ActionResult<TestDTO> CreateTest([FromBody] TestDTO testDTO)
         {
-            if(!ModelState.IsValid) 
+           /* if (!ModelState.IsValid)
             {
+               return BadRequest(ModelState);
+            } */
+            if (TestStore.testList.FirstOrDefault(u => u.Name.ToLower() == testDTO.Name.ToLower()) != null)
+            {
+                ModelState.AddModelError("CustomError", "Test already exists!");
                 return BadRequest(ModelState);
             }
-            if(testDTO == null)
+            
+            if (testDTO == null)
             {
                 return BadRequest(testDTO);
             }
-            if (testDTO.Id > 0) {
+            if (testDTO.Id > 0)
+            {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
             testDTO.Id = TestStore.testList.OrderByDescending(u => u.Id).FirstOrDefault().Id + 1;
@@ -44,9 +51,9 @@ namespace Test_API_03.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<TestDTO> GetSpecificTest(int id) 
+        public ActionResult<TestDTO> GetSpecificTest(int id)
         {
-            if ( id == 0 )
+            if (id == 0)
             {
                 return BadRequest();
             }
@@ -55,17 +62,27 @@ namespace Test_API_03.Controllers
             // It checks if the Id property of each element (u) is equal to the provided id variable.
             var test = TestStore.testList.FirstOrDefault(u => u.Id == id);
 
-            if (test == null )
+            if (test == null)
             {
                 return NotFound();
             }
             return Ok(test);
         }
 
-        [HttpDelete("${id}")]
+       /* [HttpDelete("${id}")]
         public ActionResult<TestDTO> DeleteSpecificTest(int id)
         {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
 
-        }
+            var test = TestStore.testList.Remove(id);
+
+            if (test == null)
+            {
+                return NotFound();
+            }
+        } */
     }
 }
