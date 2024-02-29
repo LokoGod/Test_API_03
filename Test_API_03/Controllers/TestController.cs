@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Xml.Linq;
 using Test_API_03.Data;
 using Test_API_03.Models;
 using Test_API_03.Models.DTO;
@@ -69,20 +70,26 @@ namespace Test_API_03.Controllers
             return Ok(test);
         }
 
-       /* [HttpDelete("${id}")]
-        public ActionResult<TestDTO> DeleteSpecificTest(int id)
+        [HttpDelete("{id:int}", Name = "DeleteSpecificTest" /*Giving explicit name for the method*/)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult DeleteSpecificTest(int id)
         {
             if (id == 0)
             {
                 return BadRequest();
             }
 
-            var test = TestStore.testList.Remove(id);
+            var test = TestStore.testList.FirstOrDefault(u => u.Id == id);
 
             if (test == null)
             {
                 return NotFound();
             }
-        } */
+
+            TestStore.testList.Remove(test);
+            return NoContent();
+        }
     }
 }
