@@ -91,5 +91,11 @@ namespace Test_API_03.Controllers
             TestStore.testList.Remove(test);
             return NoContent();
         }
+
+        [HttpPut("{id:int}", Name = "UpdateSpecificTest")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType (StatusCodes.Status404NotFound)]
+
+
     }
 }
