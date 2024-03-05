@@ -6,8 +6,8 @@ namespace Test_API_03.Data
     {
         public static List<TestDTO> testList = new List<TestDTO>
         {
-            new TestDTO {Id = 1, Name = "Kratos"},
-            new TestDTO {Id = 2, Name = "Athena"}
+            new TestDTO {Id = 1, Name = "Kratos", Kills = 58945769, Rating = 10},
+            new TestDTO {Id = 2, Name = "Athena", Kills = 58, Rating = 6}
         };
     }
 }

@@ -8,5 +8,7 @@ namespace Test_API_03.Models.DTO
         [Required]
         [MaxLength(30)]
         public string Name { get; set; }
+        public int Kills { get; set; }
+        public int Rating { get; set; }
     }
 }

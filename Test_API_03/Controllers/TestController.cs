@@ -93,8 +93,23 @@ namespace Test_API_03.Controllers
         }
 
         [HttpPut("{id:int}", Name = "UpdateSpecificTest")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType (StatusCodes.Status404NotFound)]
+
+        public IActionResult UpdateSpecificTest(int id, [FromBody] TestDTO testDTO)
+        {
+            if(testDTO == null || id != testDTO.Id)
+            {
+                return BadRequest();
+            }
+            var test = TestStore.testList.FirstOrDefault(u => u.Id == id);
+            test.Name = testDTO.Name;
+            test.Kills = testDTO.Kills;
+            test.Rating = testDTO.Rating;
+
+            return NoContent();
+        }
 
 
     }
